@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout - MyShop Store </title>
+    <link rel="stylesheet" href="styling.css">
+
+    <style>
+        .checkout-box {
+            width: 400px;
+            margin: 60px auto;
+            padding: 30px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .btn {
+            background: red;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+        }
+
+        .popup-content {
+            background: white;
+            padding: 30px;
+            width: 300px;
+            margin: 200px auto;
+            text-align: center;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="checkout-box">
+    <h2>Checkout</h2>
+
+    <input type="text" id="name" placeholder="Full Name" required>
+    <textarea id="address" placeholder="Full Address"></textarea>
+    <input type="text" id="mobile" placeholder="Mobile Number">
+
+    <select id="payment">
+        <option>Cash on Delivery</option>
+        <option>UPI</option>
+        <option>Debit Card</option>
+    </select>
+
+    <h3>Total: <span id="totalAmount"></span> Rs</h3>
+
+    <button class="btn" onclick="placeOrder()">Place Order</button>
+</div>
+
+<!-- ✅ POPUP -->
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <h2>✅ Order Placed!</h2>
+        <p>Your order has been saved successfully.</p>
+        <button class="btn" onclick="goHome()">Go To Home</button>
+    </div>
+</div>
+
+<script>
+    const total = localStorage.getItem("finalTotal");
+    document.getElementById("totalAmount").innerText = total;
+
+    function placeOrder() {
+        const name = document.getElementById("name").value;
+        const address = document.getElementById("address").value;
+        const mobile = document.getElementById("mobile").value;
+        const payment = document.getElementById("payment").value;
+
+        if (name === "" || address === "" || mobile === "") {
+            alert("Please fill all details");
+            return;
+        }
+
+        fetch("http://localhost:5000/place-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name,
+                address,
+                mobile,
+                payment,
+                total
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            localStorage.removeItem("cart");
+            document.getElementById("popup").style.display = "block";
+        })
+        .catch(err => {
+            alert("Order Failed");
+        });
+    }
+
+    function goHome() {
+        window.location.href = "index.html";
+    }
+</script>
+
+</body>
+</html>

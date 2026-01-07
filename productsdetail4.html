@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width , initial-scale=1.0">
+  <title>T-Shirt - MyShop Store </title>
+  <link rel="stylesheet" href="styling.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="navbar">
+      <div class="logo"><img src="images/logo.png" width="125px"></div>
+      <nav>
+        <ul id="MenuItems">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="Products.html">Products</a></li>
+          <li><a href="account.html">Account</a></li>
+          <li><a href="">About</a></li>
+          <li><a href="contactus.html">Contact</a></li>
+        </ul>
+      </nav>
+      <a href="cart.html"><img src="images/cart.png" width="30px" height="30px"></a>
+      <img src="images/menu.png" class="menu-icon" onclick="menutoggle()">
+    </div>
+  </div>
+
+  <!---------------- single products details ---------------->
+  <div class="small-container single-product">
+    <div class="row">
+      <div class="col-2">
+        <img src="images/product-4.jpg" width="100%" id="ProductImg">
+      </div>
+      <div class="col-2">
+        <p>Home / T-Shirt</p>
+        <h1>T-Shirt</h1>
+        <h4>Price : 400Rs. </h4>
+        <select class="sp">
+          <option>Select Size</option>
+          <option>XXL</option>
+          <option>XL</option>
+          <option>Large</option>
+          <option>Medium</option>
+          <option>Small</option>
+        </select>
+        <input type="number" value="1" class="input" min="1">
+        <button class="btn" onclick="addToCart('T-Shirt','images/product-4.jpg',400)">Add to Cart</button>
+        <h3 class="h3">Product Details <i class="fa fa-indent"></i></h3>
+        <p>Give your summer wardrobe a style upgrade with the Men's Active T-Shirt.</p>
+      </div>
+    </div>
+  </div>
+
+  <!----------- footer -------------->
+  <div class="footer">
+    <div class="container">
+      <p class="copyright">Copyright 2025 - MyShop Store </p>
+    </div>
+  </div>
+
+  <script>
+    var MenuItems = document.getElementById("MenuItems");
+    MenuItems.style.maxHeight = "0px";
+    function menutoggle() {
+      MenuItems.style.maxHeight = (MenuItems.style.maxHeight == "0px") ? "200px" : "0px";
+    }
+
+    function addToCart(name, image, price) {
+      let qty = document.querySelector(".input").value || 1;
+      qty = parseInt(qty);
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let existing = cart.find(item => item.name === name);
+      if (existing) { existing.quantity += qty; }
+      else { cart.push({ name, image, price, quantity: qty }); }
+      localStorage.setItem("cart", JSON.stringify(cart));
+      alert(name + " added to cart!");
+    }
+  </script>
+</body>
+</html>
